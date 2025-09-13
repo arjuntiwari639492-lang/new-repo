@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Portal - Login</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="theme-toggle">
+        <button id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </div>
+
+    <div class="main-container">
+        <!-- Left Facts Column -->
+        <div class="facts-column left">
+            <div class="fact-card">
+                <h3>Grand Trunk Road</h3>
+                <p>One of Asia's oldest and longest major roads, the GT Road has linked the Indian subcontinent for over 2,500 years.</p>
+            </div>
+            <div class="fact-card">
+                <h3>Rural Connectivity</h3>
+                <p>The PM Gram Sadak Yojana program aims to provide all-weather road connectivity to previously unconnected rural villages.</p>
+            </div>
+        </div>
+
+        <!-- Center Login Card -->
+        <div class="auth-card">
+            <div class="card-header">
+                <h2>Sign In</h2>
+                <p>Access your secure government account</p>
+            </div>
+            
+            <form action="#" method="post" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">Sign In</button>
+                
+                <div class="form-footer">
+                    <a href="signup.html" class="link">Don't have an account? Sign up</a>
+                    <a href="#" class="link">Forgot password?</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Facts Column -->
+        <div class="facts-column right">
+            <div class="fact-card">
+                <h3>Global Impact</h3>
+                <p>Despite having only 1% of the world's vehicles, India accounts for about 11% of global road accident fatalities.</p>
+            </div>
+             <div class="fact-card">
+                <h3>Bharatmala Project</h3>
+                <p>This is a centrally-sponsored highways program focused on optimizing freight and passenger traffic efficiency.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="theme-toggle.js"></script>
+
+    <!-- Script to connect to the backend -->
+    <script>
+        const loginForm = document.querySelector('.auth-form');
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Ensure this points to the correct running server port
+                const response = await fetch('http://127.0.0.1:5001/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.msg); // "Login successful"
+                    // window.location.href = 'dashboard.html';
+                } else {
+                    alert('Error: ' + result.msg); // "Invalid credentials"
+                }
+            } catch (error) {
+                console.error('Failed to connect to server:', error);
+                alert('An error occurred. Could not connect to the server.');
+            }
+        });
+    </script>
+</body>
+</html>
+

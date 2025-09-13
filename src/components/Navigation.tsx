@@ -44,9 +44,12 @@ export const Navigation = () => {
               <Bell className="h-4 w-4 mr-2" />
               Alerts
             </Button>
-            <Button variant="outline">
-              <User className="h-4 w-4 mr-2" />
-              Login
+            {/* --- THIS BUTTON IS NOW A LINK --- */}
+            <Button asChild variant="outline">
+              <a href="/Frontend/login.html">
+                <User className="h-4 w-4 mr-2" />
+                Login
+              </a>
             </Button>
           </div>
 
@@ -59,3 +62,4 @@ export const Navigation = () => {
     </nav>
   );
 };
+

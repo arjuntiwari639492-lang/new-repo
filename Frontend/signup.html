@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Portal - Sign Up</title>
+    <link rel="stylesheet" href="signup.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="theme-toggle">
+        <button id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </div>
+
+    <div class="main-container">
+        <!-- Left Facts Column -->
+        <div class="facts-column left">
+            <div class="fact-card">
+                <h3>Longest National Highway</h3>
+                <p>NH 44 is the longest national highway in India, stretching from Srinagar to Kanyakumari.</p>
+            </div>
+            <div class="fact-card">
+                <h3>Highest Motorable Road</h3>
+                <p>The Leh-Manali Highway is one of the world's highest motorable roads.</p>
+            </div>
+        </div>
+
+        <!-- Center Signup Card -->
+        <div class="auth-card">
+            <div class="card-header">
+                <h2>Create Account</h2>
+                <p>Register for secure government services</p>
+            </div>
+            
+            <form action="#" method="post" class="auth-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="f_name">First Name</label>
+                        <input type="text" id="f_name" name="f_name" placeholder="Aman" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="l_name">Last Name</label>
+                        <input type="text" id="l_name" name="l_name" placeholder="Singh" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="amansingh" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">Create Account</button>
+                
+                <div class="form-footer">
+                    <a href="login.html" class="link">Already have an account? Log in</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Facts Column -->
+        <div class="facts-column right">
+            <div class="fact-card">
+                <h3>Milestone Colors</h3>
+                <p>Yellow/white milestones are for National Highways, while green/white are for State Highways.</p>
+            </div>
+            <div class="fact-card">
+                <h3>Second Largest Network</h3>
+                <p>India's road network is the second largest in the world, after the United States.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="theme-toggle.js"></script>
+    
+    <!-- Script to connect to the backend -->
+    <script>
+        const signupForm = document.querySelector('.auth-form');
+
+        signupForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const f_name = document.getElementById('f_name').value;
+            const l_name = document.getElementById('l_name').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirm_password = document.getElementById('confirm_password').value;
+
+            if (password !== confirm_password) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:5001/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ f_name, l_name, email, username, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.msg);
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Error: ' + result.msg);
+                }
+            } catch (error) {
+                console.error('Failed to connect to server:', error);
+                alert('An error occurred. Could not connect to the server.');
+            }
+        });
+    </script>
+</body>
+</html>
+
