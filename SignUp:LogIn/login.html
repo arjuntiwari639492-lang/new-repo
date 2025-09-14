@@ -63,7 +63,7 @@
                 <h3>Global Impact</h3>
                 <p>Despite having only 1% of the world's vehicles, India accounts for about 11% of global road accident fatalities.</p>
             </div>
-             <div class="fact-card">
+            <div class="fact-card">
                 <h3>Bharatmala Project</h3>
                 <p>This is a centrally-sponsored highways program focused on optimizing freight and passenger traffic efficiency.</p>
             </div>
@@ -82,12 +82,9 @@
             const password = document.getElementById('password').value;
 
             try {
-                // Ensure this points to the correct running server port
                 const response = await fetch('http://127.0.0.1:5001/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password }),
                 });
 
@@ -95,7 +92,7 @@
 
                 if (response.ok) {
                     alert(result.msg); // "Login successful"
-                    // window.location.href = 'dashboard.html';
+                    window.location.href = 'http://192.168.1.6:8080/'; // redirect after login
                 } else {
                     alert('Error: ' + result.msg); // "Invalid credentials"
                 }
@@ -107,4 +104,3 @@
     </script>
 </body>
 </html>
-

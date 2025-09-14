@@ -46,9 +46,15 @@ export const Navigation = () => {
             </Button>
             {/* --- THIS BUTTON IS NOW A LINK --- */}
             <Button asChild variant="outline">
-              <a href="/Frontend/login.html">
+              <a href="/SignUp:LogIn/login.html">
                 <User className="h-4 w-4 mr-2" />
-                Login
+                LogIn
+              </a>
+            </Button>
+            <Button asChild variant="outline">
+              <a href="/SignUp:LogIn/signup.html">
+                <User className="h-4 w-4 mr-2" />
+                SignUp
               </a>
             </Button>
           </div>

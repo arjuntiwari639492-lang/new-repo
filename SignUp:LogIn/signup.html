@@ -93,7 +93,7 @@
 
     <script src="theme-toggle.js"></script>
     
-    <!-- Script to connect to the backend -->
+    <!-- Script to connect to the backend and auto-login -->
     <script>
         const signupForm = document.querySelector('.auth-form');
 
@@ -112,19 +112,34 @@
             }
 
             try {
+                // Signup request
                 const response = await fetch('http://127.0.0.1:5001/signup', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ f_name, l_name, email, username, password }),
                 });
 
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert(result.msg);
-                    window.location.href = 'login.html';
+                    alert(result.msg); // "Signup successful"
+
+                    // Auto-login after signup
+                    const loginResponse = await fetch('http://127.0.0.1:5001/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password }),
+                    });
+
+                    const loginResult = await loginResponse.json();
+
+                    if (loginResponse.ok) {
+                        window.location.href = 'http://192.168.1.6:8080/'; // redirect to dashboard
+                    } else {
+                        alert('Signup succeeded, but auto-login failed. Please login manually.');
+                        window.location.href = 'login.html';
+                    }
+
                 } else {
                     alert('Error: ' + result.msg);
                 }
@@ -136,4 +151,3 @@
     </script>
 </body>
 </html>
-
