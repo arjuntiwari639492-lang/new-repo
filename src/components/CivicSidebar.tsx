@@ -8,6 +8,7 @@ import {
   Settings,
   Home,
   Calendar,
+  Megaphone, // 1. Import the new icon
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -23,8 +24,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
+// 2. Add the new "Report Issue" item to the array
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: Home },
+  { title: "Report Issue", url: "/report-issue", icon: Megaphone }, // <-- ADDED HERE
   { title: "My Reports", url: "/reports", icon: FileText },
   { title: "Progress Tracking", url: "/progress", icon: Calendar },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
@@ -39,7 +42,6 @@ export function CivicSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   
-  // Updated this function to change text colors to black
   const getNavClasses = ({ isActive }) =>
     isActive
       ? "bg-primary text-black font-medium"
@@ -56,7 +58,8 @@ export function CivicSidebar() {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.slice(0, 3).map((item) => (
+              {/* 3. Updated slice to include the new item */}
+              {navigationItems.slice(0, 4).map((item) => ( // <-- CHANGED 3 to 4
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} end className={getNavClasses}>
@@ -75,7 +78,8 @@ export function CivicSidebar() {
           <SidebarGroupLabel>Community</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.slice(3, 7).map((item) => (
+              {/* 3. Updated slice to reflect the new item's position */}
+              {navigationItems.slice(4, 8).map((item) => ( // <-- UPDATED SLICE
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} end className={getNavClasses}>
@@ -111,4 +115,3 @@ export function CivicSidebar() {
     </Sidebar>
   );
 }
-

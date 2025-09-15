@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, Mic, MapPin, AlertTriangle } from "lucide-react";
+import { Camera, Mic, MapPin, AlertTriangle, LocateFixed } from "lucide-react";
 import potholeIcon from "@/assets/pothole-icon.jpg";
 import streetlightIcon from "@/assets/streetlight-icon.jpg";
 import litterIcon from "@/assets/litter-icon.jpg";
@@ -17,6 +17,9 @@ export const IssueReporting = () => {
     phone: "",
     location: "",
     description: "",
+    latitude: null as number | null,
+    longitude: null as number | null,
+    map_url: ""
   });
 
   const categories = [
@@ -25,28 +28,74 @@ export const IssueReporting = () => {
       title: "Pothole Reporting",
       description: "Report dangerous road conditions and potholes",
       icon: potholeIcon,
-      color: "border-warning",
     },
     {
       id: "streetlight",
-      title: "Streetlight Issues", 
+      title: "Streetlight Issues",
       description: "Report malfunctioning or broken streetlights",
       icon: streetlightIcon,
-      color: "border-primary",
     },
     {
       id: "litter",
       title: "Waste & Litter",
       description: "Report overflowing bins and litter issues",
       icon: litterIcon,
-      color: "border-primary",
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        
+        // FIX: Corrected the template literal from {latitude} to ${latitude}
+        const mapUrl = `https://www.google.com/maps?q=$${latitude},${longitude}`;
+        
+        setFormData({
+          ...formData,
+          location: mapUrl, 
+          latitude,
+          longitude,
+          map_url: mapUrl
+        });
+      }, (error) => {
+        console.error("Error getting location:", error);
+        alert("Could not get your location. Please enter it manually.");
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Report submitted:", { category: activeCategory, ...formData });
+    try {
+      const response = await fetch('http://127.0.0.1:5001/api/reports', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ category: activeCategory, ...formData }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.msg);
+        setFormData({
+            name: "",
+            phone: "",
+            location: "",
+            description: "",
+            latitude: null,
+            longitude: null,
+            map_url: ""
+        });
+      } else {
+        alert('Error: ' + result.msg);
+      }
+    } catch (error) {
+      console.error('Failed to connect to server:', error);
+      alert('An error occurred. Could not connect to the server.');
+    }
   };
 
   return (
@@ -62,7 +111,6 @@ export const IssueReporting = () => {
         </div>
 
         <Tabs value={activeCategory} onValueChange={setActiveCategory} className="max-w-4xl mx-auto">
-          {/* Category Selection */}
           <TabsList className="grid w-full grid-cols-3 mb-8">
             {categories.map((category) => (
               <TabsTrigger
@@ -80,7 +128,6 @@ export const IssueReporting = () => {
             ))}
           </TabsList>
 
-          {/* Report Forms */}
           {categories.map((category) => (
             <TabsContent key={category.id} value={category.id}>
               <Card className="shadow-card">
@@ -100,7 +147,6 @@ export const IssueReporting = () => {
 
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Personal Info */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="name">Full Name</Label>
@@ -125,23 +171,27 @@ export const IssueReporting = () => {
                       </div>
                     </div>
 
-                    {/* Location */}
                     <div className="space-y-2">
                       <Label htmlFor="location">Issue Location</Label>
-                      <div className="relative">
-                        <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="location"
-                          value={formData.location}
-                          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                          placeholder="Enter the exact location of the issue"
-                          className="pl-10"
-                          required
-                        />
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <div className="relative flex-grow">
+                          <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            id="location"
+                            value={formData.location}
+                            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                            placeholder="Enter address or use GPS"
+                            className="pl-10"
+                            required
+                          />
+                        </div>
+                        <Button type="button" variant="outline" onClick={handleLocation} className="shrink-0">
+                          <LocateFixed className="h-4 w-4 mr-2" />
+                          Use My Current Location
+                        </Button>
                       </div>
                     </div>
 
-                    {/* Media Uploads */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Button type="button" variant="outline" className="h-20 flex flex-col gap-2">
                         <Camera className="h-6 w-6" />
@@ -153,7 +203,6 @@ export const IssueReporting = () => {
                       </Button>
                     </div>
 
-                    {/* Description */}
                     <div className="space-y-2">
                       <Label htmlFor="description">Issue Description</Label>
                       <Textarea
@@ -166,7 +215,6 @@ export const IssueReporting = () => {
                       />
                     </div>
 
-                    {/* Guidelines */}
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
