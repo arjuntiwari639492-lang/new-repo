@@ -1,6 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { HeroSection } from "@/components/HeroSection";
-import { IssueReporting } from "@/components/IssueReporting";
+
 import { ProcessFlow } from "@/components/ProcessFlow";
 import { CivicResponsibilities } from "@/components/CivicResponsibilities";
 
@@ -10,7 +10,7 @@ const CivicDashboard = () => {
       <Navigation />
       <main>
         <HeroSection />
-        <IssueReporting />
+        
         <ProcessFlow />
         <CivicResponsibilities />
       </main>

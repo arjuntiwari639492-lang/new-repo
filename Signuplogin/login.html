@@ -18,7 +18,6 @@
     </div>
 
     <div class="main-container">
-        <!-- Left Facts Column -->
         <div class="facts-column left">
             <div class="fact-card">
                 <h3>Grand Trunk Road</h3>
@@ -30,7 +29,6 @@
             </div>
         </div>
 
-        <!-- Center Login Card -->
         <div class="auth-card">
             <div class="card-header">
                 <h2>Sign In</h2>
@@ -57,7 +55,6 @@
             </form>
         </div>
 
-        <!-- Right Facts Column -->
         <div class="facts-column right">
             <div class="fact-card">
                 <h3>Global Impact</h3>
@@ -72,7 +69,6 @@
 
     <script src="theme-toggle.js"></script>
 
-    <!-- Script to connect to the backend -->
     <script>
         const loginForm = document.querySelector('.auth-form');
 
@@ -91,10 +87,15 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert(result.msg); // "Login successful"
-                    window.location.href = 'http://192.168.1.6:8080/'; // redirect after login
+                    // SUCCESS!
+                    console.log(result.msg); // Log success message to the console.
+                    
+                    // Redirect immediately to your React app's home page.
+                    window.location.href = 'http://localhost:8080/'; 
+
                 } else {
-                    alert('Error: ' + result.msg); // "Invalid credentials"
+                    // Show an error message if login fails.
+                    alert('Error: ' + result.msg);
                 }
             } catch (error) {
                 console.error('Failed to connect to server:', error);

@@ -14,8 +14,8 @@ import LeaderboardPage from "./pages/LeaderboardPage";
 import Trending from "./pages/Trending";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-// 1. Import your new page component
 import { ReportIssuePage } from "./components/ReportIssuePage";
+import ReportDetailPage from "./pages/ReportDetailPage"; // <-- ADDED IMPORT
 
 const queryClient = new QueryClient();
 
@@ -38,11 +38,11 @@ const App = () => (
                 <Route path="/leaderboard" element={<LeaderboardPage />} />
                 <Route path="/trending" element={<Trending />} />
                 <Route path="/settings" element={<Settings />} />
-
-                {/* 2. Add the new route for your page */}
                 <Route path="/report-issue" element={<ReportIssuePage />} />
+
+                {/* This is a dynamic route for individual report details */}
+                <Route path="/report/:id" element={<ReportDetailPage />} /> {/* <-- ADDED ROUTE */}
                 
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
