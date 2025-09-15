@@ -24,9 +24,7 @@ export const Navigation = () => {
             <a href="#home" className="text-muted-foreground hover:text-primary transition-colors font-medium">
               Home
             </a>
-            <a href="#report" className="text-muted-foreground hover:text-primary transition-colors font-medium">
-              Report Issue
-            </a>
+            
             <a href="#track" className="text-muted-foreground hover:text-primary transition-colors font-medium">
               Track Progress
             </a>

@@ -123,3 +123,15 @@ All colors MUST be HSL for consistent theming.
   }
 }
 
+/* Add this to your main CSS file, e.g., src/index.css */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}

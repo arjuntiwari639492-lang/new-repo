@@ -15,42 +15,44 @@ import Trending from "./pages/Trending";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { ReportIssuePage } from "./components/ReportIssuePage";
-import ReportDetailPage from "./pages/ReportDetailPage"; // <-- ADDED IMPORT
+import ReportDetailPage from "./pages/ReportDetailPage";
+import { useLenis } from "./hooks/useLenis"; // <-- 1. IMPORT THE HOOK
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <SidebarProvider defaultOpen={true}>
-          <div className="flex min-h-screen w-full">
-            <CivicSidebar />
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<CivicDashboard />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/progress" element={<ProgressPage />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/community" element={<Community />} />
-                <Route path="/leaderboard" element={<LeaderboardPage />} />
-                <Route path="/trending" element={<Trending />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/report-issue" element={<ReportIssuePage />} />
+const App = () => {
+  useLenis(); // <-- 2. CALL THE HOOK TO ACTIVATE SMOOTH SCROLLING
 
-                {/* This is a dynamic route for individual report details */}
-                <Route path="/report/:id" element={<ReportDetailPage />} /> {/* <-- ADDED ROUTE */}
-                
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-          </div>
-        </SidebarProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <SidebarProvider defaultOpen={true}>
+            <div className="flex min-h-screen w-full">
+              <CivicSidebar />
+              <main className="flex-1">
+                <Routes>
+                  <Route path="/" element={<CivicDashboard />} />
+                  <Route path="/reports" element={<Reports />} />
+                  <Route path="/progress" element={<ProgressPage />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/community" element={<Community />} />
+                  <Route path="/leaderboard" element={<LeaderboardPage />} />
+                  <Route path="/trending" element={<Trending />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/report-issue" element={<ReportIssuePage />} />
+                  <Route path="/report/:id" element={<ReportDetailPage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+            </div>
+          </SidebarProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
