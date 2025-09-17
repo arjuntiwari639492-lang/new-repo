@@ -93,7 +93,11 @@ export default function Reports() {
           <p className="text-center text-muted-foreground py-8">No reports found.</p>
         ) : (
           reports.map((report) => {
-            const imageUrls = report.image_url ? report.image_url.split(',') : [];
+            // Check if the image_urls is an array (from new backend) or a comma-separated string (from old backend)
+            const imageUrls = Array.isArray(report.image_urls) 
+              ? report.image_urls 
+              : report.image_urls?.split(',') || [];
+            
             return (
               <Card key={report.id} className="hover:shadow-lg transition-all duration-300">
                 <CardHeader className="pb-3">
@@ -111,17 +115,32 @@ export default function Reports() {
                 <CardContent>
                   <p className="text-muted-foreground">{report.description}</p>
                   
+                  {/* --- NEW SECTION FOR AUDIO --- */}
+                  {report.voice_note_url && (
+                    <div className="mt-4">
+                      <h4 className="font-semibold text-sm mb-2">Voice Note</h4>
+                      <audio controls className="w-full">
+                        <source src={`http://localhost:5001${report.voice_note_url}`} type="audio/webm" />
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+                  )}
+
+                  {/* --- NEW SECTION FOR PHOTOS --- */}
                   {imageUrls.length > 0 && (
-                    <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
-                      {imageUrls.map((path, index) => (
-                        <a href={`http://localhost:5001/${path}`} target="_blank" rel="noopener noreferrer" key={index}>
-                          <img
-                            src={`http://localhost:5001/${path}`}
-                            alt={`Report image ${index + 1}`}
-                            className="h-28 w-28 object-cover rounded-md border hover:opacity-80 transition-opacity"
-                          />
-                        </a>
-                      ))}
+                    <div className="mt-4">
+                      <h4 className="font-semibold text-sm mb-2">Photo Evidence</h4>
+                      <div className="flex gap-2 overflow-x-auto pb-2">
+                        {imageUrls.map((path: string, index: number) => (
+                          <a href={`http://localhost:5001${path}`} target="_blank" rel="noopener noreferrer" key={index}>
+                            <img
+                              src={`http://localhost:5001${path}`}
+                              alt={`Report image ${index + 1}`}
+                              className="h-28 w-28 object-cover rounded-md border hover:opacity-80 transition-opacity"
+                            />
+                          </a>
+                          ))}
+                      </div>
                     </div>
                   )}
 
@@ -133,7 +152,6 @@ export default function Reports() {
                           <a href={report.map_url} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4 mr-1" />View on Map</a>
                         </Button>
                       )}
-                      {/* --- THIS BUTTON IS NOW A FUNCTIONAL LINK --- */}
                       <Button variant="outline" size="sm" asChild>
                         <Link to={`/report/${report.id}`}>
                           <Eye className="h-4 w-4 mr-1" />

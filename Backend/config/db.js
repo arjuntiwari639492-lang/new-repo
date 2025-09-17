@@ -1,11 +1,12 @@
 const mysql = require('mysql2');
 
-// Create a connection using the socket
+// Create a connection for Windows (no socketPath, use host + port)
 const connection = mysql.createConnection({
-  user: 'root',
-  password: '@dityAsingh',   // replace with your MySQL root password
-  database: 'civicsync',   // replace with your DB name
-  socketPath: '/tmp/mysql.sock' // important on macOS
+  host: 'localhost',        // MySQL server host
+  port: 5001,               // default MySQL port
+  user: 'root',             // your MySQL username
+  password: 'Arjun@10112004', // replace with your MySQL root password
+  database: 'civicsync'     // replace with your DB name
 });
 
 // Connect
@@ -13,7 +14,7 @@ connection.connect(err => {
   if (err) {
     console.error('❌ MySQL connection failed:', err);
   } else {
-    console.log('✅ MySQL connected via socket!');
+    console.log('✅ MySQL connected on Windows!');
   }
 });
 
